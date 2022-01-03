@@ -1,8 +1,10 @@
 # Snake_Game
 
-install dependencies by pip install -r requirements.txt
+Install dependencies by pip install -r requirements.txt
 
-intall pytorch from https://pytorch.org/
+Install pytorch from https://pytorch.org/
 
-run the file by python3 main.py
+To Train on Gpu set useGpu to True in main.py
+
+Run the file by python3 main.py
 
