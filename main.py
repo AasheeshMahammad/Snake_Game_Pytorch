@@ -10,8 +10,9 @@ MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = .001  # learning rate
 
-if torch.cuda.is_available():
-    DEVICE = torch.device('cuda')     #uses gpu to train if present
+useGpu = False
+if torch.cuda.is_available() and useGpu:
+    DEVICE = torch.device('cuda')
 else:
     DEVICE = torch.device('cpu')
 
