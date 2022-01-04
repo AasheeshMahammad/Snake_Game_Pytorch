@@ -1,4 +1,4 @@
-# Snake_Game
+# Snake_Game_Pytorch
 
 Install dependencies by pip install -r requirements.txt
 
