@@ -106,7 +106,7 @@ class Snake_Game_Agent:
         for pt in self.snake:
             pygame.draw.rect(self.display,const.COLORS['blue'],pygame.Rect(pt.x,pt.y,const.BLOCK_SIZE,const.BLOCK_SIZE))
             pygame.draw.rect(self.display,const.COLORS['green'],pygame.Rect(pt.x+4,pt.y+4,12,12))
-            pygame.draw.aaline(self.display,const.COLORS['white'],(self.width/2,self.height/2),(pt.x,pt.y))
+            #pygame.draw.aaline(self.display,const.COLORS['white'],(self.width/2,self.height/2),(pt.x,pt.y))
         pygame.draw.rect(self.display,const.COLORS['red'],pygame.Rect(self.food.x,self.food.y,const.BLOCK_SIZE,const.BLOCK_SIZE))
         text=const.FONT.render("Score : "+str(self.score),True,const.COLORS['white'])
         self.display.blit(text,[0,0])

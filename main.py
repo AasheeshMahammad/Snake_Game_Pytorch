@@ -10,7 +10,7 @@ MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = .001  # learning rate
 
-useGpu = False
+useGpu = True
 if torch.cuda.is_available() and useGpu:
     DEVICE = torch.device('cuda')
 else:
@@ -25,6 +25,10 @@ class Agent:
         self.gamma=0.9
         self.memory=deque(maxlen=MAX_MEMORY)
         self.model = Linear_QNet(11,256,3,DEVICE)
+        try:
+            self.model.load_state_dict(torch.load("model/model.pth"))
+        except FileNotFoundError:
+            pass
         self.trainer = QTrainer(self.model,LR,self.gamma,DEVICE)
         
 
@@ -80,7 +84,7 @@ class Agent:
         self.trainer.train_step(state,action,reward,next_state,done)
 
     def get_action(self,state):
-        self.epsilon = 80 - self.n_games
+        self.epsilon = 20 - self.n_games
         final_action = [0,0,0]
         if random.randint(0,200) < self.epsilon:
             move_ind= random.randint(0,2)
