@@ -51,6 +51,10 @@ class Snake_Game_Agent:
             'DOWN': const.Point(self.head.x,self.head.y-const.BLOCK_SIZE)
         }
         return points
+    
+    def get_distance(self):
+        distance = ((self.food.x-self.head.x)**2 + (self.food.y-self.head.y)**2)**0.5
+        return distance
 
     def _place_food(self):
         x=random.randint(0,(self.width-const.BLOCK_SIZE)//const.BLOCK_SIZE)*const.BLOCK_SIZE
@@ -60,10 +64,41 @@ class Snake_Game_Agent:
             self._place_food()
 
     def get_state(self):
-        state = {'LEFT':self.direction == Directions.LEFT,
+        direction_state = {'LEFT':self.direction == Directions.LEFT,
                  'RIGHT':self.direction == Directions.RIGHT,
                  'UP':self.direction == Directions.UP,
                  'DOWN':self.direction == Directions.DOWN}
+        points = self.get_points()
+        state = [
+            #straight collision
+            (direction_state['RIGHT'] and self.collides(points['RIGHT'])) or
+            (direction_state['LEFT'] and self.collides(points['LEFT'])) or
+            (direction_state['UP'] and self.collides(points['UP'])) or
+            (direction_state['DOWN'] and self.collides(points['DOWN'])),
+            #right collision
+            (direction_state['RIGHT'] and self.collides(points['DOWN'])) or
+            (direction_state['LEFT'] and self.collides(points['UP'])) or
+            (direction_state['UP'] and self.collides(points['RIGHT'])) or
+            (direction_state['DOWN'] and self.collides(points['LEFT'])),
+            #left collision
+            (direction_state['RIGHT'] and self.collides(points['UP'])) or
+            (direction_state['LEFT'] and self.collides(points['DOWN'])) or
+            (direction_state['UP'] and self.collides(points['LEFT'])) or
+            (direction_state['DOWN'] and self.collides(points['RIGHT'])),
+
+            #direction states
+            direction_state['LEFT'],
+            direction_state['RIGHT'],
+            direction_state['UP'],
+            direction_state['DOWN'],
+
+            #food location
+            self.food.x < self.head.x,
+            self.food.x > self.head.x,
+            self.food.y < self.head.y,
+            self.food.y > self.head.y
+        ]
+        state = np.array(state, dtype=np.uint8)
         return state
 
     def play(self,action):
@@ -72,13 +107,17 @@ class Snake_Game_Agent:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            
+        
+        initial_distance = self.get_distance()
         self._move(action)
+        final_distance = self.get_distance()
         alive=True    
         reward=0
+        if final_distance < initial_distance:
+            reward = 2
         if self.collides() or self.frame_iteration > 110*len(self.snake):
             alive=False
-            reward = -10
+            reward = -50
         if self.head == self.food:
             reward = 10
             self.score+=1

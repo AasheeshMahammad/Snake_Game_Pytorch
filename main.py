@@ -33,7 +33,7 @@ class Agent:
         
 
     def get_state(self,game):
-        points = game.get_points()
+        """points = game.get_points()
         direction_state = game.get_state()
         #clock_wise=['RIGHT','DOWN','LEFT','UP']
         state = [
@@ -65,7 +65,8 @@ class Agent:
             game.food.y < game.head.y,
             game.food.y > game.head.y
         ]
-        return np.array(state,dtype=int)
+        return np.array(state,dtype=int)"""
+        return game.get_state()
 
 
 
@@ -84,7 +85,7 @@ class Agent:
         self.trainer.train_step(state,action,reward,next_state,done)
 
     def get_action(self,state):
-        self.epsilon = 20 - self.n_games
+        self.epsilon = 30 - self.n_games
         final_action = [0,0,0]
         if random.randint(0,200) < self.epsilon:
             move_ind= random.randint(0,2)

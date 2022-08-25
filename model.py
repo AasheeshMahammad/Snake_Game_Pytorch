@@ -14,7 +14,7 @@ class Linear_QNet(nn.Module):
         self.linear2 = nn.Linear(hidden_size,output_size,device=self.device)
     
     def forward(self,x):
-        x = F.relu(self.linear1(x))
+        x = F.leaky_relu(self.linear1(x))
         x = self.linear2(x)
         return x
 
